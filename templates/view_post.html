@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}View Post{% endblock %}
+
+{% block content %}
+  <!-- Create Post Button -->
+  <div class="text-center" style="margin-top: 20px;">
+    <a href="{{ url_for('create_post') }}" class="btn btn-primary">Create New Post</a>
+</div>
+
+<h1 class="text-center">Post Details</h1>
+
+<div class="container">
+    <div class="post-details">
+        <h2>{{ post['title'] }}</h2>
+        {{ post['description'] | safe }}
+        <p><strong>Github Link:</strong> <a href="{{ post['image'] }}" target="_blank">{{ post['image'] }}</a></p>
+        <p><strong>Project ID:</strong> {{ post['projectId'] }}</p>
+        <!-- Add more fields as needed -->
+        
+    </div>
+</div>
+        <!-- Button to go back to dashboard -->
+        <div class="text-center" style="margin-top: 20px;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+<style>
+    .post-details {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+    }
+    .post-details h2 {
+        margin-top: 0;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}
+<!-- Display Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container mt-4">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}

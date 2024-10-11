@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Admin Dashboard</h1>
+<script>
+    function confirmDelete(projectId) {
+        // Show confirmation dialog
+        const confirmAction = confirm("Are you sure you want to delete this post?");
+        if (confirmAction) {
+            // If user confirms, redirect to delete route
+            window.location.href = /admin/posts/${projectId}/delete;
+        }
+    }
+</script>
+
+<div class="container">
+    <!-- Total Posts Panel -->
+    <div class="panel panel-default text-center">
+        <div class="panel-heading">Total Posts</div>
+        <div class="panel-body">
+            <h3>{{ total_posts }}</h3>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Right panel for displaying posts -->
+        <div>
+            <h3>All Posts</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>GitHub Link</th>
+                        <th>Project ID</th> <!-- New column for Project ID -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>{{ post['title'] }}</td>
+                        <td>{{ post['description'][:150] | safe }}...</td> <!-- Display truncated description -->
+                        <td><a href="{{ post['image'] }}" target="_blank">GitHub</a></td>
+                        <td>{{ post['projectId'] }}</td> <!-- Display Project ID -->
+                        <td>
+                            <!-- View button -->
+                            <a href="{{ url_for('view_post', projectId=post['projectId']) }}" class="btn btn-info">View</a>
+                            <a href="{{ url_for('edit_post', projectId=post['projectId']) }}" class="btn btn-warning">Edit</a>
+                            <form action="{{ url_for('delete_post', projectId=post['projectId']) }}" method="POST" style="display:inline-block;">
+                                <!-- Example of a delete button -->
+                                <button class="btn btn-danger" onclick="confirmDelete('{{ post.projectId }}')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Create Post Button -->
+    <div class="text-center" style="margin-top: 20px;">
+        <a href="{{ url_for('create_post') }}" class="btn btn-primary">Create New Post</a>
+    </div>
+
+</div> <!-- Closing container div -->
+
+<style>
+    .dashboard-container {
+        display: flex;
+        margin-top: 20px;
+    }
+    .right-panel {
+        width: 100%;
+        padding: 20px;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table th, .table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+    }
+    .table th {
+        background-color: #f2f2f2;
+    }
+    .btn {
+        padding: 6px 12px;
+        margin-right: 5px;
+        text-decoration: none;
+        color: white;
+        border-radius: 4px;
+    }
+    .btn-info { background-color: #17a2b8; }
+    .btn-warning { background-color: #ffc107; }
+    .btn-danger { background-color: #dc3545; }
+    .btn-primary { background-color: #007bff; }
+</style>
+{% endblock %}
+<!-- Display Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container mt-4">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}

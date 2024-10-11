@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background for contrast */
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack children vertically */
+        }
+        .container {
+            flex: 1; /* Take up remaining space */
+        }
+        .login-container {
+            max-width: 400px; /* Set max width for the login panel */
+            width: 100%; /* Responsive width */
+            padding: 20px; /* Add some padding */
+            background-color: #fff; /* White background for the panel */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            margin: auto; /* Center the panel */
+            position: relative; /* Relative positioning */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust for the actual size */
+        }
+        .navbar-nav {
+            margin: auto; /* Center the nav items */
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <!-- Main Content -->
+    <div class="container my-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

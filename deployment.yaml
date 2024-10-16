@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: flask-app
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - image: flask-app:latest  # Make sure to include the tag
+        name: flask-app
+        ports:
+        - containerPort: 8080  # Match this with the Flask app port
+        resources: {}

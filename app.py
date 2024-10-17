@@ -36,6 +36,11 @@ def get_admin_credentials(username):
     except Exception as e:
         return None, None
 
+# Route for the home page with a login button
+@app.route('/')
+def home():
+    return render_template('main.html')
+
 # Route for admin login
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():

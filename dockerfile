@@ -16,12 +16,12 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Make port 8080 available to the world outside this container
-EXPOSE 8080
+EXPOSE 5000
 
 # Define environment variable for Flask
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=8080
+ENV FLASK_RUN_PORT=5000
 
 # Run the Flask app directly without Gunicorn
 CMD ["flask", "run"]

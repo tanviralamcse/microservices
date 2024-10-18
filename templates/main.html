@@ -3,10 +3,12 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<h1 class="text-center">Admin Dashboard</h1>
-    <h1>Welcome to the Admin Panel</h1>
-    <a href="{{ url_for('login') }}">
-        <button>Login</button>
-    </a>
-</body>
-</html>
+<div class="container my-4">
+    <h1 class="text-center">Welcome to the Admin Panel</h1>
+    <div class="text-center">
+        <a href="{{ url_for('login') }}">
+            <button class="btn btn-primary">Login</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

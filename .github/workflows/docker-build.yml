@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     # Step 1: Checkout the repository
     - name: Checkout code
@@ -41,13 +42,10 @@ jobs:
       run: |
         docker push ${{ secrets.ECR_REPOSITORY_URL }}:latest
 
-    # Step 7: Set up kubectl for EKS using aws-actions/eks-update-kubeconfig
+    # Step 7: Update kubeconfig to connect to EKS cluster
     - name: Update kubeconfig for EKS
-      uses: aws-actions/eks-update-kubeconfig@v1
-      with:
-        cluster-name: itsawscom # Replace with your EKS cluster name
-        region: ${{ secrets.AWS_DEFAULT_REGION }}
-        role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_ROLE_NAME # Optional, if assuming a role
+      run: |
+        aws eks update-kubeconfig --name itsawscom --region ${{ secrets.AWS_DEFAULT_REGION }}
 
     # Step 8: Update Kubernetes deployment with the new Docker image
     - name: Update Kubernetes deployment

@@ -42,9 +42,9 @@ jobs:
       run: |
         docker push ${{ secrets.ECR_REPOSITORY_URL }}:latest
 
-    # Step 7: Set up kubectl and configure kubeconfig for EKS
-    - name: Set up kubectl
-      uses: aws-actions/eks-kubectl-action@v1
+    # Step 7: Configure kubectl with EKS credentials
+    - name: Update kubeconfig for EKS
+      uses: aws-actions/eks-update-kubeconfig@v1
       with:
         cluster-name: itsawscom
         region: ${{ secrets.AWS_DEFAULT_REGION }}

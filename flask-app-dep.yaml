@@ -2,10 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app
-  labels: # Add labels to improve service discovery
+  labels:
     app: flask-app
 spec:
-  replicas: 2  # Number of pod replicas
+  replicas: 2
   selector:
     matchLabels:
       app: flask-app
@@ -14,36 +14,21 @@ spec:
       labels:
         app: flask-app
     spec:
-      imagePullSecrets:
-      - name: ecr-secret
       containers:
       - name: flask-app
         image: 295863487981.dkr.ecr.eu-central-1.amazonaws.com/microservices/flask-app:latest
         ports:
-        - containerPort: 5000  # Ensure Flask is running on this port
+        - containerPort: 5000
         env:
+        - name: AWS_DEFAULT_REGION
+          value: "eu-central-1"
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
-              name: aws-secret  # Name of your Kubernetes secret
-              key: AWS_ACCESS_KEY_ID
+              name: aws-credentials
+              key: access_key_id
         - name: AWS_SECRET_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              name: aws-secret  # Name of your Kubernetes secret
-              key: AWS_SECRET_ACCESS_KEY
-        - name: AWS_DEFAULT_REGION
-          value: eu-central-1
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: flask-service
-spec:
-  type: LoadBalancer  # Expose externally
-  ports:
-  - port: 80  # External port for accessing the service
-    targetPort: 5000  # Internal container port where Flask is running
-    protocol: TCP
-  selector:
-    app: flask-app  # Connects the service to the pod via label selector
+              name: aws-credentials
+              key: secret_access_key

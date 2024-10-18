@@ -49,7 +49,7 @@ jobs:
     - name: Update kubeconfig for EKS
       uses: aws-actions/eks-update-kubeconfig@v1
       with:
-        cluster-name: itsawscom # Replace with your EKS cluster name
+        cluster-name: itsawscom # Replace with yur EKS cluster name
         region: ${{ secrets.AWS_DEFAULT_REGION }}
         # Uncomment if you are assuming a role
         # role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_ROLE_NAME

@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to ECR
+name: Build, Push to ECR, and Deploy to EKS
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -35,3 +36,17 @@ jobs:
       run: |
         docker push ${{ secrets.ECR_REPOSITORY_URL }}:latest
 
+    # Deploy to EKS
+    - name: Update kubeconfig for EKS
+      uses: aws-actions/eks-update-kubeconfig@v1
+      with:
+        cluster-name: itsawscom
+        region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: Install kubectl
+      run: |
+        sudo apt-get update && sudo apt-get install -y kubectl
+
+    - name: Update Kubernetes deployment
+      run: |
+        kubectl set image deployment/flask-app flask-app=${{ secrets.ECR_REPOSITORY_URL }}:latest

@@ -44,6 +44,6 @@ jobs:
 
     - name: Update Kubernetes deployment
       run: |
-        kubectl set image deployment/<deployment-name> <container-name>=${{ secrets.ECR_REPOSITORY_URL }}:latest
+        kubectl set image deployment/flask-app flask-app=${{ secrets.ECR_REPOSITORY_URL }}:latest
       env:
         KUBECONFIG: ${{ secrets.KUBECONFIG }}

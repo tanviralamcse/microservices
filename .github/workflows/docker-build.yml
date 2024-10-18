@@ -1,4 +1,4 @@
-name: Build, Push to ECR, and Deploy to EKS
+name: Build and Push Docker Image to ECR
 
 on:
   push:
@@ -8,13 +8,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     # Step 1: Checkout the repository
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Step 2: Configure AWS credentials using secrets stored in GitHub
+    # Step 2: Set up Docker Buildx (if you're using buildx features)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Step 3: Configure AWS credentials using secrets stored in GitHub
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -22,36 +25,36 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-    # Step 3: Log in to Amazon ECR
+    # Step 4: Log in to Amazon ECR
     - name: Log in to Amazon ECR
       run: |
         aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URL }}
 
-    # Step 4: Build the Docker image
+    # Step 5: Build the Docker image
     - name: Build Docker image
       run: |
-        docker build -t flask-app .
+        docker build -t ${{ secrets.ECR_REPOSITORY_URL }}:latest .
 
-    # Step 5: Tag the Docker image for ECR
+    # Step 6: Tag the Docker image for ECR
     - name: Tag Docker image
       run: |
         docker tag flask-app:latest ${{ secrets.ECR_REPOSITORY_URL }}:latest
 
-    # Step 6: Push the Docker image to ECR
+    # Step 7: Push the Docker image to ECR
     - name: Push Docker image to ECR
       run: |
         docker push ${{ secrets.ECR_REPOSITORY_URL }}:latest
 
-    # Step 7: Configure kubectl with EKS credentials
+    # Step 8: Set up kubectl for EKS and configure kubeconfig
     - name: Update kubeconfig for EKS
       uses: aws-actions/eks-update-kubeconfig@v1
       with:
-        cluster-name: itsawscom
+        cluster-name: itsawscom # Replace with your EKS cluster name
         region: ${{ secrets.AWS_DEFAULT_REGION }}
-        # If you are using a specific IAM role for EKS, uncomment and fill the role-to-assume:
+        # Uncomment if you are assuming a role
         # role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_ROLE_NAME
 
-    # Step 8: Update the Kubernetes deployment with the new Docker image
+    # Step 9: Update Kubernetes deployment with the new Docker image
     - name: Update Kubernetes deployment
       run: |
         kubectl set image deployment/flask-app flask-app=${{ secrets.ECR_REPOSITORY_URL }}:latest

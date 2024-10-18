@@ -45,7 +45,7 @@ jobs:
     # Step 7: Update kubeconfig to connect to EKS cluster
     - name: Update kubeconfig for EKS
       run: |
-        aws eks update-kubeconfig --name itsawscom --region ${{ secrets.AWS_DEFAULT_REGION }}
+        aws eks update-kubeconfig --name flask-app-cluster --region ${{ secrets.AWS_DEFAULT_REGION }}
 
     # Step 8: Update Kubernetes deployment with the new Docker image
     - name: Update Kubernetes deployment

@@ -39,7 +39,7 @@ def get_admin_credentials(username):
 # Route for the home page with a login button
 @app.route('/')
 def home():
-    return "hello world"
+    return render_template('main.html')
 
 
 # Route for admin login

@@ -46,6 +46,7 @@ I used **AWS Lambda** to handle specific serverless functions, particularly for 
 For data storage, I used **DynamoDB**:
 - **User credentials**: Stored user login information.
 - **Posts**: Stored post data for the application.
+
 The Flask app was integrated with DynamoDB to seamlessly fetch, create, update, and delete data.
 
 ---
